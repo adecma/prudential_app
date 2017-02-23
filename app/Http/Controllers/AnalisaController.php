@@ -7,10 +7,13 @@ use Illuminate\Http\Request;
 use DB;
 use App\Kriteria;
 use App\Produk;
+use PDF;
 
 class AnalisaController extends Controller
 {
-    public function analisa()
+    protected $dataAnalisa;
+
+    protected function analisa()
     {
     	// mengambil data produk
     	$produks = DB::table('produk_range')
@@ -70,12 +73,34 @@ class AnalisaController extends Controller
 
     	// membuat collection untuk variable $hasil
     	$collHasil = collect($hasil);
-    	// merangking dengan sort desc berdasarkan hasil dan produk_title
-    	$rankProduk = $collHasil->sortByDesc(function($data) {
+    	// merangking dengan sort desc berdasarkan hasil dan produk_title dan simpan ke dalam properti $dataAnalisa
+    	$this->dataAnalisa = $collHasil->sortByDesc(function($data) {
 				    		return $data['hasil'] . ' ' . $data['produk_title'];
 				    	})
     					->values();
+        // mengembalikan nilai
+        return $this->dataAnalisa;
+    }
 
-    	return view('analisa.index', compact('rankProduk'));
+    public function index()
+    {
+        $rankProduk = $this->analisa();
+
+        return view('analisa.index', compact('rankProduk'));
+    }
+
+    public function cetak()
+    {
+        return redirect()->route('analisa.pdf', time());
+    }
+
+    public function pdf($time)
+    {
+        $analisa = $this->analisa();
+
+        $pdf = PDF::loadView('analisa.pdf',compact('analisa'))
+            ->setPaper('a4', 'potrait');
+ 
+        return $pdf->stream('data_analisa-'.$time.'.pdf');
     }
 }

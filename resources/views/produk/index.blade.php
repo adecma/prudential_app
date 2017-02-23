@@ -6,7 +6,7 @@
 			Produk : {{ $produks->total() }}
 			<div class="pull-right">
 				<a href="{{ route('produk.create') }}" class="btn btn-primary btn-xs">Tambah</a>
-				<a href="#" class="btn btn-warning btn-xs">Cetak</a>
+				<a target="_blank" href="{{ route('produk.cetak') }}" class="btn btn-warning btn-xs">Cetak</a>
 			</div>
 		</div>
 
@@ -38,9 +38,8 @@
 							<th>Produk</th>
 
 							@foreach($kriterias as $kriteria)
-								<th>{{ $kriteria }}</th>								
+								<th>{{ $kriteria }}</th>							
 							@endforeach
-
 							<th></th>
 						</tr>
 					</thead>

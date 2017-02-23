@@ -5,7 +5,7 @@
 		<div class="panel-heading">
 			Hasil Analisa - Produk : {{ $rankProduk->count() }}
 			<div class="pull-right">
-				<a href="#" class="btn btn-warning btn-xs">Cetak</a>
+				<a target="_blank" href="{{ route('analisa.cetak') }}" class="btn btn-warning btn-xs">Cetak</a>
 			</div>
 		</div>
 		<div class="panel-body">

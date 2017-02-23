@@ -37,8 +37,14 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/range/cetak', 'RangeController@cetak')->name('range.cetak');
 	Route::get('/range/pdf/{time}', 'RangeController@pdf')->name('range.pdf');
     Route::resource('/range', 'RangeController', ['except' => 'show']);
+
+    Route::get('/produk/cetak', 'ProdukController@cetak')->name('produk.cetak');
+	Route::get('/produk/pdf/{time}', 'ProdukController@pdf')->name('produk.pdf');
 	Route::resource('/produk', 'ProdukController', ['except' => 'show']);
-	Route::get('/analisa', 'AnalisaController@analisa')
+
+	Route::get('/analisa/cetak', 'AnalisaController@cetak')->name('analisa.cetak');
+	Route::get('/analisa/pdf/{time}', 'AnalisaController@pdf')->name('analisa.pdf');
+	Route::get('/analisa', 'AnalisaController@index')
 		->name('analisa');
 });
 

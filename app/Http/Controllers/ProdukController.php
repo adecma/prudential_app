@@ -12,6 +12,8 @@ use App\Range;
 
 use DB;
 
+use PDF;
+
 class ProdukController extends Controller
 {
     /**
@@ -224,5 +226,24 @@ class ProdukController extends Controller
         session()->flash('notifikasi', '<strong>Berhasil!</strong> Data dihapus.');
 
         return redirect()->route('produk.index');
+    }
+
+    public function cetak()
+    {
+        return redirect()->route('produk.pdf', time());
+    }
+
+    public function pdf($time)
+    {
+        $produks = Produk::orderBy('id', 'asc')->get();
+
+        $kriterias = Kriteria::pluck('title');
+
+        $no = 1;
+
+        $pdf = PDF::loadView('produk.pdf',compact('produks', 'kriterias', 'no'))
+            ->setPaper('a4', 'potrait');
+ 
+        return $pdf->stream('data_produk-'.$time.'.pdf');
     }
 }
