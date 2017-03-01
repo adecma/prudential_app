@@ -3,18 +3,17 @@
 @section('content')
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			Produk : {{ $produks->total() }}
+			Riwayat : {{ $riwayats->total() }}
 			<div class="pull-right">
-				<a href="{{ route('produk.create') }}" class="btn btn-primary btn-xs">Tambah</a>
-				<a target="_blank" href="{{ route('produk.cetak') }}" class="btn btn-warning btn-xs">Cetak</a>
+				<a target="_blank" href="{{ route('riwayat.cetak') }}" class="btn btn-warning btn-xs">Cetak</a>
 			</div>
 		</div>
 
 		<div class="panel-body">
-			@if(count($produks) > 0)
+			@if(count($riwayats) > 0)
 				<div class="row">
 					<div class="col-md-12">
-						<form action="{{ route('produk.index') }}" method="get" class="form-inline">
+						<form action="{{ route('riwayat.index') }}" method="get" class="form-inline">
 							<div class="input-group">
 								<div class="input-group-addon">
 									Search :
@@ -35,36 +34,36 @@
 					<thead>
 						<tr>
 							<th>No</th>
-							<th>Produk</th>
-
-							@foreach($kriterias as $kriteria)
-								<th>{{ $kriteria }}</th>							
-							@endforeach
-							<th></th>
+							<th>Nama</th>
+							<th>Alamat</th>
+							<th>Kontak</th>
+							<th>Rekomendasi</th>
+							<th colspan="2">Tanggal</th>
 						</tr>
 					</thead>
 
 					<tbody>
-						@foreach($produks as $produk)
+						@foreach($riwayats as $riwayat)
 							<tr>
 								<td>{{ $no++ }}</td>
+								<td>{{ $riwayat->nama }}</td>
+								<td>{{ $riwayat->alamat }}</td>
+								<td>{{ $riwayat->kontak }}</td>
+								<td>{{ $riwayat->limit }}</td>
+								<td>{{ $riwayat->created_at->format('d F Y, H:i:s') }}</td>
 								<td>
-									<a href="{{ route('produk.show', $produk->id) }}">{{ $produk->title }}</a>
-								</td>
-								@foreach($produk->ranges as $range)
-									<td>{{ number_format($range->pivot->nilai) }}</td>
-								@endforeach
-								<td>
-									<a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-info btn-xs">Edit</a>
+									<a href="{{ route('riwayat.show', $riwayat->id) }}" class="btn btn-success btn-xs">Detail</a>
 
-									<button type="button" class="btn btn-danger btn-xs btn-delete" value="{{ $produk->id }}">Hapus</button>
+									<a href="{{ route('konsultasi.cetak', $riwayat->id) }}" class="btn btn-info btn-xs">Cetak</a>
+
+									<button type="button" class="btn btn-danger btn-xs btn-delete" value="{{ $riwayat->id }}">Hapus</button>
 								</td>
 							</tr>
 						@endforeach
 					</tbody>
 				</table>
 
-				{{ $produks->appends(['q' => $q])->links() }}
+				{{ $riwayats->appends(['q' => $q])->links() }}
 
 				<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" >
 					<div class="modal-dialog">
@@ -106,7 +105,7 @@
 		$(document).ready(function() {
 			$('.btn-delete').click(function() {
 				//build deleting url
-				var url = '{{ route('produk.index') }}' + '/' + $(this).val();
+				var url = '{{ route('riwayat.index') }}' + '/' + $(this).val();
 				//set action form url
 				$('#form-delete').attr('action', url);
 				//show modal

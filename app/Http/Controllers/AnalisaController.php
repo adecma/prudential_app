@@ -7,13 +7,16 @@ use Illuminate\Http\Request;
 use DB;
 use App\Kriteria;
 use App\Produk;
+use App\Range;
+use App\Riwayat;
 use PDF;
+use Carbon\Carbon;
 
 class AnalisaController extends Controller
 {
     protected $dataAnalisa;
 
-    protected function analisa()
+    protected function analisa($nasabah = null, $identitasNasabah = null, $limit = null)
     {
     	// mengambil data produk
     	$produks = DB::table('produk_range')
@@ -24,8 +27,18 @@ class AnalisaController extends Controller
     		->orderBy('range_id', 'asc')
     		->get();
 
+        if (is_array($nasabah)) {
+            foreach ($nasabah as $nas) {
+                $produks->push((object) $nas);
+            }            
+        }
+        //$produks->push((object) ['produk_id' => 'user', 'kriteria_id' => 1, 'bobot' => 30]);
+        
+
     	// mengelompokkan produk berdasarkan kriteria
     	$kriteria_produk = $produks->groupBy('kriteria_id');
+
+
 
     	// mengambil data kriteria
     	$kriterias = Kriteria::all();
@@ -55,9 +68,15 @@ class AnalisaController extends Controller
     		}
     	}
 
+
+
     	// mengambil data produk
     	$listProduk = Produk::orderBy('id', 'asc')->get();
 
+        if (is_array($identitasNasabah)) {
+            $listProduk->push((object) $identitasNasabah);
+        }
+        
     	for ($a=0; $a < $listProduk->count() ; $a++) { 
     		foreach ($kriterias as $kriteria) { 
     			// filter kriteria berdasarkan id kriteria
@@ -74,11 +93,29 @@ class AnalisaController extends Controller
     	// membuat collection untuk variable $hasil
     	$collHasil = collect($hasil);
     	// merangking dengan sort desc berdasarkan hasil dan produk_title dan simpan ke dalam properti $dataAnalisa
-    	$this->dataAnalisa = $collHasil->sortByDesc(function($data) {
+    	$sortHasil = $collHasil->sortByDesc(function($data) {
 				    		return $data['hasil'] . ' ' . $data['produk_title'];
 				    	})
     					->values();
-        // mengembalikan nilai
+
+        if (isset($limit)) {
+            $hasilUser = $sortHasil->where('produk_id', '=', 'user');
+            $userKey = $hasilUser->keyBy('produk_id');
+
+            $hasilExceptUser = $sortHasil->reject(function($value, $key){
+                return $value['produk_id'] == 'user';
+            });
+
+            $hasilFilter = $hasilExceptUser->filter(function($value, $key) use($userKey) {
+                return $value['hasil'] <= $userKey['user']['hasil'];
+            });
+
+            $this->dataAnalisa = $hasilFilter->take($limit);
+        } else {
+            $this->dataAnalisa = $sortHasil;
+        }
+        
+        // mengembalikan nilai        
         return $this->dataAnalisa;
     }
 
@@ -102,5 +139,118 @@ class AnalisaController extends Controller
             ->setPaper('a4', 'potrait');
  
         return $pdf->stream('data_analisa-'.$time.'.pdf');
+    }
+
+    public function konsultasi_reg()
+    {
+        $ranges = Range::select('kriteria_id', DB::raw("GROUP_CONCAT(concat(atas, ',', bawah)) as batas"))->groupBy('kriteria_id')->get();
+
+        return view('konsultasi.registrasi', compact('ranges'));
+    }
+
+    public function konsultasi_store(Request $request)
+    {
+        //  # menyiapkan rules validasi form
+        //  mengambil data kriteria_id, batas atas dan bawah
+        $ranges = Range::select('kriteria_id', DB::raw("GROUP_CONCAT(concat(atas, ',', bawah)) as batas"))->groupBy('kriteria_id')->get();
+
+        // membuat collection $rules. data pertama adalah simpan rule untuk title
+        $rules = collect([
+                'nama' => 'required|min:5|max:50',
+                'alamat' => 'required|min:5|max:140',
+                'kontak' => 'required|numeric|digits_between:10,13',
+                'rekomendasi' => 'required|numeric|min:3|max:10',
+            ]);
+        // membuat rule untuk kriteria
+        foreach ($ranges as $range) {
+            // memisahkan data string menjadi array
+            $batas = explode(',', $range->batas);
+            // mengubah array $batas menjadi collection
+            $colBatas = collect($batas);
+            // mengambil data pertama
+            $first = $colBatas->first();
+            // mengambil data terakhir
+            $last = $colBatas->last();
+            // membuat rule untuk kriteria dan menggabungkannya dengan collection $rules
+            $rules->offsetSet('kriteria_' . $range->kriteria_id, 'required|numeric|min:' . $first . '|max:' . $last);
+        }
+        // mengubah collection menjadi array
+        $arrRules = $rules->toArray();
+        // validasi form
+        $this->validate($request, $arrRules);
+
+        $kriterias = Kriteria::all();
+        
+        $ranges2 = Range::all();
+
+        foreach ($kriterias as $kriteria) {
+            $rangeKriteriaSelected = $ranges2->where('kriteria_id', '=', $kriteria->id);
+            foreach ($rangeKriteriaSelected as $rangeSelected) {
+                 if($request->input('kriteria_' . $kriteria->id) >= $rangeSelected->atas AND $request->input('kriteria_' . $kriteria->id) <= $rangeSelected->bawah)
+                 {
+                    $value = [
+                        'produk_id' => 'user',
+                        //'nilai input' => $request->input('kriteria-' . $kriteria->id),
+                        //'batas atas' => $rangeSelected->atas,
+                        //'batas bawah' => $rangeSelected->bawah,
+                        'range_id' => $rangeSelected->id,
+                        'kriteria_id' => $kriteria->id,
+                        'bobot' => $rangeSelected->bobot,
+                    ];
+                 }
+             }
+
+             $nasabah[] = $value;              
+        }
+
+        $identitasNasabah = [
+            'id' => 'user',
+            'title' => $request->input('nama'),
+        ]; 
+
+        $hasil = $this->analisa($nasabah, $identitasNasabah, $request->input('rekomendasi'));
+
+        $riwayat = new Riwayat;
+        $riwayat->nama = $request->input('nama');
+        $riwayat->alamat = $request->input('alamat');
+        $riwayat->kontak = $request->input('kontak');
+        $riwayat->limit = $request->input('rekomendasi');
+
+        foreach ($kriterias as $kriteria) {
+            $kriteriaUser[] = [
+                'kriteria' => $kriteria->title, 
+                'nilai' => $request->input('kriteria_' . $kriteria->id)
+            ];
+        }
+
+        $riwayat->kriteria = json_encode($kriteriaUser);
+        $riwayat->hasil = json_encode($hasil);
+        $riwayat->save();
+
+        session()->flash('notifikasi', '<strong>Rekomendasi!</strong> berhasil dilakukan.');
+        
+        return redirect()->route('konsultasi.result', $riwayat->id);
+    }
+
+    public function konsultasi_result($id)
+    {
+        $riwayat = Riwayat::findOrFail($id);
+
+        return view('konsultasi.hasil', compact('riwayat'));
+    }
+
+    public function konsultasi_cetak($id)
+    {
+        return redirect()->route('konsultasi.pdf', [$id, time()]);
+    }
+
+    public function konsultasi_pdf($id, $time)
+    {
+        $riwayat = Riwayat::findOrFail($id);
+
+        $pdf = PDF::loadView('konsultasi.pdf',compact('riwayat'))
+            ->setPaper('a4', 'potrait');
+ 
+        return $pdf->stream('hasil_rekomendasi-'.$id.'-'.$time.'.pdf');
     }
 }

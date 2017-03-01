@@ -5,12 +5,32 @@
 		<div class="panel-body">
 			<h3>Halaman Tentang</h3>
 			<p class="text-justify">
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil iusto aspernatur eius eaque perspiciatis, laborum earum voluptatem recusandae ab quidem, dolore tempora quas error voluptates itaque sunt eos! Pariatur, vitae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit illum minima mollitia. Error aut sed numquam qui, placeat explicabo sit corrupti aperiam dolore repellendus et ipsum repudiandae eveniet harum!
-				<br><br>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis excepturi corporis aliquam error aliquid voluptas voluptates rerum itaque, expedita ipsa eius cum consequuntur ratione quam odio, quod accusantium nemo esse. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati quia, praesentium ipsum a suscipit assumenda nam veniam hic delectus consequuntur nostrum est quasi accusantium impedit magnam nisi id ratione. Quo.
-				<br><br>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum vero quibusdam, eveniet eaque, vel modi ipsum nobis quas, odit ducimus officia ex. Earum laboriosam inventore quae ducimus quas cum laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti error eum alias temporibus necessitatibus repudiandae excepturi eius, culpa vero totam iusto voluptas quas reprehenderit quae, sequi vel maxime sed amet!
+				Asuransi merupakan suatu tunjangan bagi anda yang berkecukupan atau memerlukan kebutuhan dimasa akan datang, asuransi sendiri dibagi dalam berbagai macam, antara lain asuransi jiwa, asuransi kesehatan, dan asuransi laiannya. Adapun asuransi yang dibahas dalam aplikasi ini adalah Rider Asuran(Asuransi Tambahan), rider asuran biasanya memiliki jangka waktu yang disesuaikan dengan kemampuan ataupun dengan beban masalah yang dibebankan oleh keluarga pihak pemakai asuran secara signifikan. Berikut beberapa Produk Rider Asuran(Asuransi Tambahan) berserta keterangan setiap produknya.
 			</p>
+
+			@php
+				$no = 1;
+			@endphp
+
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>No</th>
+						<th width="20%">Produk</th>
+						<th>Keterangan</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					@foreach($produks as $produk)
+						<tr>
+							<td>{{ $no++ }}</td>
+							<td>{{ $produk->title }}</td>
+							<td>{{ $produk->keterangan }}</td>
+						</tr>
+					@endforeach
+				</tbody>
+			</table>
 		</div>
 	</div>	
 @endsection

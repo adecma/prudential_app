@@ -70,6 +70,7 @@
                 <div class="top-right links">
                     @if (Auth::check())
                         <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ route('konsultasi.registrasi') }}">Konsultasi</a>
                         <a href="{{ route('tentang') }}">Tentang</a>
                         <a href="{{ route('bantuan') }}">Bantuan</a>
                         <a href="{{ url('/logout') }}"
@@ -82,6 +83,7 @@
                             {{ csrf_field() }}
                         </form>
                     @else
+                        <a href="{{ route('konsultasi.registrasi') }}">Konsultasi</a>
                         <a href="{{ route('tentang') }}">Tentang</a>
                         <a href="{{ route('bantuan') }}">Bantuan</a>
                         <a href="{{ url('/login') }}">Masuk</a>

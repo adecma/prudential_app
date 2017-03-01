@@ -57,7 +57,9 @@
                             <li class="{!! substr(Route::currentRouteName(), 0, 5) == 'range' ? 'active' : '' !!}"><a href="{{ route('range.index') }}">Range</a></li>
                             <li class="{!! substr(Route::currentRouteName(), 0, 6) == 'produk' ? 'active' : '' !!}"><a href="{{ route('produk.index') }}">Produk</a></li>
                             <li class="{!! substr(Route::currentRouteName(), 0, 7) == 'analisa' ? 'active' : '' !!}"><a href="{{ route('analisa') }}">Analisa</a></li>
+                            <li class="{!! substr(Route::currentRouteName(), 0, 7) == 'riwayat' ? 'active' : '' !!}"><a href="{{ route('riwayat.index') }}">Riwayat</a></li>
                         @endif
+                        <li class="{!! substr(Route::currentRouteName(), 0, 10) == 'konsultasi' ? 'active' : '' !!}"><a href="{{ route('konsultasi.registrasi') }}">Konsultasi</a></li>
                         <li class="{!! substr(Route::currentRouteName(), 0, 7) == 'tentang' ? 'active' : '' !!}"><a href="{{ route('tentang') }}">Tentang</a></li>
                         <li class="{!! substr(Route::currentRouteName(), 0, 7) == 'bantuan' ? 'active' : '' !!}"><a href="{{ route('bantuan') }}">Bantuan</a></li>
                     </ul>

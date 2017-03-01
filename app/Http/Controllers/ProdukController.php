@@ -126,7 +126,11 @@ class ProdukController extends Controller
      */
     public function show($id)
     {
-        //
+        $produk = Produk::findOrFail($id);
+
+        $kriterias = Kriteria::pluck('title');
+
+        return view('produk.show', compact('produk', 'kriterias'));
     }
 
     /**
