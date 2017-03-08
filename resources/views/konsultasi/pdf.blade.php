@@ -147,7 +147,7 @@
             @foreach($produks as $produk)
                 @if($hasil[$i] == $produk->id)
                     <li>
-                        <strong>{{ $produk->title }}</strong> ({{ $produk->id }} - {{ $hasil[$x++] }}) <br>
+                        <strong>{{ $produk->title }}</strong> <br>
                         {{ $produk->keterangan }} <br>
 
                         @if($produk->kondisis->count())
