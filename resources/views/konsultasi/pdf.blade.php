@@ -26,6 +26,33 @@
         }
         
     </style>
+
+    <style>
+        .page-break {
+            page-break-after: always;
+        }
+        
+        .header,
+        .footer {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+        }
+        .header {
+            top: 0px;
+        }
+        .footer {
+            bottom: 0px;
+        }
+        .pagenum:before {
+            content: counter(page);
+        }
+
+        ul, h5 {
+            font-family:Arial;
+            font-size:10px;
+        }
+    </style>
 </head>
 <body>
     <div style="font-family:Arial; font-size:12px;">
@@ -101,5 +128,64 @@
             @endforeach
         </tbody>
     </table>
+
+
+
+    <div class="page-break"></div>
+
+    <h4>Lampiran Detail Produk</h4>
+
+    <ul>
+        @php
+            $hasil = collect((array) json_decode($riwayat->hasil))
+                ->values()
+                ->pluck('produk_id');
+            $x = 0
+        @endphp
+        
+        @for($i = 0; $i < count($hasil); $i++) 
+            @foreach($produks as $produk)
+                @if($hasil[$i] == $produk->id)
+                    <li>
+                        <strong>{{ $produk->title }}</strong> ({{ $produk->id }} - {{ $hasil[$x++] }}) <br>
+                        {{ $produk->keterangan }} <br>
+
+                        @if($produk->kondisis->count())
+                            <h5>Pertanggungan Kondisi Kritis {{ $produk->kondisis->count() }}</h5>
+
+                            @php
+                                $no = 1
+                            @endphp
+
+                            <table class="tg">
+                                <thead>
+                                    <tr>
+                                        <th class="tg-head">No</th>
+                                        <th class="tg-head">Kondisi</th>
+                                        <th class="tg-head">Stadium A</th>
+                                        <th class="tg-head">Stadium B</th>
+                                        <th class="tg-head">Stadium C</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($produk->kondisis as $kondisi)
+                                        <tr>
+                                            <td class="tg-center">{{ $no++ }}</td>
+                                            <td class="tg-left">{{ $kondisi->title }}</td>
+                                            <td class="tg-center">{{ $kondisi->stadium_a }}</td>
+                                            <td class="tg-center">{{ $kondisi->stadium_b }}</td>
+                                            <td class="tg-center">{{ $kondisi->stadium_c }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table> <br><br>
+                        @else
+                            <br>
+                        @endif
+                    </li>
+                @endif
+            @endforeach
+        @endfor
+    </ul>
 </body>
 </html>

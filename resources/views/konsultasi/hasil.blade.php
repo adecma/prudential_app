@@ -74,7 +74,11 @@
 						@foreach(json_decode($riwayat->hasil) as $data)				
 							<tr>
 								<td>{{ $no++ }}</td>
-								<td>{{ $data->produk_title }}</td>
+								<td>
+									<a target="_blank" href="{{ route('produk.show', $data->produk_id) }}">
+										{{ $data->produk_title }}
+									</a>
+								</td>
 								<td>{{ $data->hasil }}</td>
 							</tr>						
 						@endforeach

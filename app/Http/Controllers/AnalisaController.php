@@ -156,9 +156,9 @@ class AnalisaController extends Controller
 
         // membuat collection $rules. data pertama adalah simpan rule untuk title
         $rules = collect([
-                'nama' => 'required|min:5|max:50',
+                'nama' => 'required|min:5|max:50|regex:/^[a-z\ \']*$/iu',
                 'alamat' => 'required|min:5|max:140',
-                'kontak' => 'required|numeric|digits_between:10,13',
+                'kontak' => 'required|numeric|digits_between:10,12',
                 'rekomendasi' => 'required|numeric|min:3|max:10',
             ]);
         // membuat rule untuk kriteria
@@ -248,7 +248,12 @@ class AnalisaController extends Controller
     {
         $riwayat = Riwayat::findOrFail($id);
 
-        $pdf = PDF::loadView('konsultasi.pdf',compact('riwayat'))
+        $idProduks = collect(json_decode($riwayat->hasil))
+            ->pluck('produk_id');
+
+        $produks = Produk::whereIn('id', $idProduks)->get();
+
+        $pdf = PDF::loadView('konsultasi.pdf',compact('riwayat', 'produks'))
             ->setPaper('a4', 'potrait');
  
         return $pdf->stream('hasil_rekomendasi-'.$id.'-'.$time.'.pdf');

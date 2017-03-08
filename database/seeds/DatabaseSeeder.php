@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RangeSeeder::class);
         $this->call(ProdukSeeder::class);
         $this->call(ProdukRangeSeeder::class);
+        $this->call(KondisiSeeder::class);
     }
 }

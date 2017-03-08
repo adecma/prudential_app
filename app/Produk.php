@@ -16,4 +16,9 @@ class Produk extends Model
     public function scopeSearch($query, $q) {
     	$query->where('title', 'like', '%' . $q . '%');
     }
+
+    public function kondisis() 
+    {
+    	return $this->belongsToMany('App\Kondisi');
+    }
 }

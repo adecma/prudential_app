@@ -22,12 +22,49 @@
 					<dd>{{ number_format($range->pivot->nilai) }}</dd>
 				@endforeach
 			</dl>
-		</div>
 
-		<div class="panel-footer">
-			<a href="{{ route('produk.index') }}" class="btn btn-default">Kembali</a>
+			@if($produk->kondisis->count())
+				@php
+					$n = 1;
+				@endphp
 
-			<a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-info">Edit</a>
+				<hr>
+				
+				<h4>Pertanggungan Kondisi Kritis {{ $produk->kondisis->count() }}</h4>
+
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>Kondisi</th>
+								<th>Stadium A</th>
+								<th>Stadium B</th>
+								<th>Stadium C</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($produk->kondisis as $kondisi)
+								<tr>
+									<td>{{ $n++ }}</td>
+									<td>{{ $kondisi->title }}</td>
+									<td>{{ $kondisi->stadium_a }}</td>
+									<td>{{ $kondisi->stadium_b }}</td>
+									<td>{{ $kondisi->stadium_c }}</td>
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+			@endif
 		</div>
+		
+		@if(Auth::check())
+			<div class="panel-footer">
+				<a href="{{ route('produk.index') }}" class="btn btn-default">Kembali</a>
+
+				<a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-info">Edit</a>
+			</div>
+		@endif
 	</div>
 @endsection
