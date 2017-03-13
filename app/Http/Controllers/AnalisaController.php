@@ -145,7 +145,9 @@ class AnalisaController extends Controller
     {
         $ranges = Range::select('kriteria_id', DB::raw("GROUP_CONCAT(concat(atas, ',', bawah)) as batas"))->groupBy('kriteria_id')->get();
 
-        return view('konsultasi.registrasi', compact('ranges'));
+        $countRiwayat = Riwayat::orderBy('id', 'desc')->first();
+
+        return view('konsultasi.registrasi', compact('ranges', 'countRiwayat'));
     }
 
     public function konsultasi_store(Request $request)

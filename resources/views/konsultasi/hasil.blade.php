@@ -7,7 +7,7 @@
 		</div>
 
 		<div class="panel-body">
-			<h4>Data User</h4>
+			<h4>No. Konsultasi ke - {{ $riwayat->id }}</h4>
 			<div class="table-responsive">
 				<table class="table table-hover">
 					<thead>

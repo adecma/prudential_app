@@ -12,6 +12,7 @@
 					<strong>Identitas User</strong>
 				</p>
 				<div class="col-md-6">
+					<label>No. Konsultasi ke : {{ $countRiwayat->id+1 }}</label>
 					<div class="form-group {{ $errors->has('nama') ? 'has-error' : '' }}">
 						<label>Nama</label>
 						<input type="text" class="form-control" name="nama" value="{{ old('nama') }}">
