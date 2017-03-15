@@ -59,7 +59,7 @@
         <center><h3>Hasil Rekomendasi Produk</h3></center>
     </div>
     
-    <h4>No. Konsultasi ke - {{ $riwayat->id }}</h4>
+    <h4>Counter Pengunjung {{ $riwayat->id }}</h4>
     <table class="tg">
         <thead>
             <tr>

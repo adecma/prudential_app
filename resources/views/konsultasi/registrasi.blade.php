@@ -8,11 +8,15 @@
 		<form action="{{ route('konsultasi.store') }}" method="post">
 			<div class="panel-body">
 				{{ csrf_field() }}
-				<p class="text-center">
-					<strong>Identitas User</strong>
-				</p>
-				<div class="col-md-6">
-					<label>No. Konsultasi ke : {{ $countRiwayat->id+1 }}</label>
+				<div class="row">
+					<div class="col-md-5">
+						<label>Counter Pengunjung {{ $countRiwayat->id+1 }}</label>
+					</div>
+					<div class="col-md-7">
+						<strong>Identitas User</strong>
+					</div>
+				</div>
+				<div class="col-md-6">					
 					<div class="form-group {{ $errors->has('nama') ? 'has-error' : '' }}">
 						<label>Nama</label>
 						<input type="text" class="form-control" name="nama" value="{{ old('nama') }}">
@@ -30,7 +34,7 @@
 					</div>
 
 					<div class="form-group {{ $errors->has('rekomendasi') ? 'has-error' : '' }}">
-						<label>Rekomendasi</label>
+						<label>Rekomendasi yang diinginkan</label>
 						<input type="text" class="form-control" name="rekomendasi" value="{{ old('rekomendasi') }}" placeholder="3 - 10">
 					</div>
 				</div>
@@ -38,10 +42,6 @@
 				<p class="text-center">
 					<strong>Masukkan nilai kriteria</strong>
 				</p>
-
-					
-
-					
 
 				@foreach($ranges->chunk(3) as $chunk)
 					<div class="row">
