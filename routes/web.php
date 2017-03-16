@@ -29,7 +29,10 @@ Route::get('/profil/edit', 'HomeController@editProfil')
 Route::post('/profil/edit', 'HomeController@updateProfil')
     ->name('profil.update');
 
+Route::get('/produk/cetak', 'ProdukController@cetak')->name('produk.cetak');
+Route::get('/produk/pdf/{time}', 'ProdukController@pdf')->name('produk.pdf');
 Route::resource('/produk', 'ProdukController');
+
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('/kriteria/cetak', 'KriteriaController@cetak')->name('kriteria.cetak');
 	Route::get('/kriteria/pdf/{time}', 'KriteriaController@pdf')->name('kriteria.pdf');
@@ -38,9 +41,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/range/cetak', 'RangeController@cetak')->name('range.cetak');
 	Route::get('/range/pdf/{time}', 'RangeController@pdf')->name('range.pdf');
     Route::resource('/range', 'RangeController', ['except' => 'show']);
-
-    Route::get('/produk/cetak', 'ProdukController@cetak')->name('produk.cetak');
-	Route::get('/produk/pdf/{time}', 'ProdukController@pdf')->name('produk.pdf');
 
 	Route::get('/analisa/cetak', 'AnalisaController@cetak')->name('analisa.cetak');
 	Route::get('/analisa/pdf/{time}', 'AnalisaController@pdf')->name('analisa.pdf');
