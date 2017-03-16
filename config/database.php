@@ -64,6 +64,9 @@ return [
             'prefix' => '',
             'strict' => true,
             'engine' => null,
+            'dump' => [
+                'dump_binary_path' => 'C:\laragon\bin\mysql\mariadb-10.1.9\bin',
+            ],
         ],
 
         'pgsql' => [

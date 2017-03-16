@@ -59,9 +59,14 @@
                             <li class="{!! substr(Route::currentRouteName(), 0, 7) == 'analisa' ? 'active' : '' !!}"><a href="{{ route('analisa') }}">Analisa</a></li>
                             <li class="{!! substr(Route::currentRouteName(), 0, 7) == 'riwayat' ? 'active' : '' !!}"><a href="{{ route('riwayat.index') }}">Riwayat</a></li>
                         @endif
+
                         <li class="{!! substr(Route::currentRouteName(), 0, 10) == 'konsultasi' ? 'active' : '' !!}"><a href="{{ route('konsultasi.registrasi') }}">Konsultasi</a></li>
                         <li class="{!! substr(Route::currentRouteName(), 0, 7) == 'tentang' ? 'active' : '' !!}"><a href="{{ route('tentang') }}">Tentang</a></li>
                         <li class="{!! substr(Route::currentRouteName(), 0, 7) == 'bantuan' ? 'active' : '' !!}"><a href="{{ route('bantuan') }}">Bantuan</a></li>
+                        
+                        @if(Auth::check())
+                            <li class="{!! substr(Route::currentRouteName(), 0, 13) == 'service.index' ? 'active' : '' !!}"><a href="{{ route('service.index') }}">Backup</a></li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->

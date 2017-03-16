@@ -1,5 +1,5 @@
 <?php
-
+//use Artisan;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,6 +50,10 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('/riwayat/cetak', 'RiwayatController@cetak')->name('riwayat.cetak');
 	Route::get('/riwayat/pdf/{time}', 'RiwayatController@pdf')->name('riwayat.pdf');
 	Route::resource('/riwayat', 'RiwayatController', ['except' => ['create', 'store', 'edit', 'update']]);
+
+	Route::get('/service', 'ServiceController@index')->name('service.index');
+	Route::get('/service/backup', 'ServiceController@backup')->name('service.backup');
+	Route::delete('/service/backup/{name}', 'ServiceController@destroy')->name('service.delete');
 });
 
 Route::get('/konsultasi', 'AnalisaController@konsultasi_reg')->name('konsultasi.registrasi');
