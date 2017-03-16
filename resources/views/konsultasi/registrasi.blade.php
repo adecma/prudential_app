@@ -10,7 +10,7 @@
 				{{ csrf_field() }}
 				<div class="row">
 					<div class="col-md-5">
-						<label>Counter Pengunjung {{ $countRiwayat->id+1 }}</label>
+						<label>Counter Pengunjung {{ empty($countRiwayat) ? 1 : $countRiwayat->id+1 }}</label>
 					</div>
 					<div class="col-md-7">
 						<strong>Identitas User</strong>
