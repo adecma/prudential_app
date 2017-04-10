@@ -106,7 +106,7 @@
         <div class="container">
             @if(session()->has('notifikasi'))
                 <div class="row">
-                    <div class="alert alert-success text-center">
+                    <div class="alert {{ session()->has('danger') ? session('danger') : 'alert-success' }} text-center">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         {!! session('notifikasi') !!}
                     </div>    

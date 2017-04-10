@@ -3,7 +3,7 @@
 @section('content')
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			Kriteria : {{ $kriterias->total() }}
+			Kriteria : {{ $kriterias->total() }} | Bobot : {{ $kriterias->sum('bobot') }}
 			<div class="pull-right">
 				<a href="{{ route('kriteria.create') }}" class="btn btn-primary btn-xs">Tambah</a>
 				<a target="_blank" href="{{ route('kriteria.cetak') }}" class="btn btn-warning btn-xs">Cetak</a>

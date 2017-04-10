@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Kriteria;
 use PDF;
+use Validator;
 
 class KriteriaController extends Controller
 {
@@ -42,6 +43,15 @@ class KriteriaController extends Controller
     {
         $atributs = ['benefit', 'cost'];
 
+        $kriterias = Kriteria::all();
+
+        if ($kriterias->sum('bobot') >= 100) {
+            session()->flash('danger', 'alert-danger');
+            session()->flash('notifikasi', '<strong>Maaf!</strong> Bobot sudah mencapai 100.');
+
+            return redirect()->route('kriteria.index');
+        }
+
         return view('kriteria.create', compact('atributs'));
     }
 
@@ -53,9 +63,11 @@ class KriteriaController extends Controller
      */
     public function store(Request $request)
     {
+        $limitBobot = $this->validateBobot('store');
+
         $this->validate($request, [
                 'title' => 'required|min:5|max:50',
-                'bobot' => 'required|numeric|min:1|max:99',
+                'bobot' => 'required|numeric|min:1|max:99|limitBobot:' . $limitBobot,
                 'atribut' => 'required|in:benefit,cost',
             ]);
 
@@ -108,9 +120,11 @@ class KriteriaController extends Controller
     {
         $kriteria = Kriteria::findOrFail($id);
 
+        $limitBobot = $this->validateBobot('update', $kriteria->id);
+
         $this->validate($request, [
                 'title' => 'required|min:5|max:50',
-                'bobot' => 'required|numeric|min:1|max:99',
+                'bobot' => 'required|numeric|min:1|max:99|limitBobot:' . $limitBobot,
                 'atribut' => 'required|in:benefit,cost',
             ]);
 
@@ -156,5 +170,25 @@ class KriteriaController extends Controller
             ->setPaper('a4', 'potrait');
  
         return $pdf->stream('data_kriteria-'.$time.'.pdf');
+    }
+
+    private function validateBobot($type, int $id = null)
+    {
+        if ($type == 'store') {
+            $kriterias = Kriteria::all();
+        } else {
+            $kriterias = Kriteria::where('id', '!=', $id)->get();
+        }
+
+        $cacheBobot = $kriterias->sum('bobot');
+        $limitBobot = 100 - $cacheBobot;
+
+        Validator::extend('limitBobot', 
+                        function($attribute, $value, $parameters, $validator){
+                            return $value <= array_first($parameters);
+                        }
+                    , 'Bidang :attribute melampaui batas. Nilai bobot maximal ' . $limitBobot);
+
+        return $limitBobot;
     }
 }
