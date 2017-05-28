@@ -26,6 +26,7 @@
                 <th class="tg-head">Nama</th>
                 <th class="tg-head">Alamat</th>
                 <th class="tg-head">Kontak</th>
+                <th class="tg-head">E-mail</th>
                 <th class="tg-head">Rekomendasi</th>
                 <th class="tg-head">Tanggal</th>
             </tr>
@@ -37,6 +38,7 @@
                     <td class="tg-left">{{ $riwayat->nama }}</td>
                     <td class="tg-left">{{ $riwayat->alamat }}</td>
                     <td class="tg-left">{{ $riwayat->kontak }}</td>
+                    <td class="tg-left">{{ $riwayat->email }}</td>
                     <td class="tg-center">{{ $riwayat->limit }}</td>
                     <td class="tg-left">{{ $riwayat->created_at->format('d F Y, H:i:s') }}</td>
                 </tr>

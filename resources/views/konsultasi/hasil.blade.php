@@ -26,6 +26,8 @@
 									<dd>{{ $riwayat->alamat }}</dd>
 									<dt>Kontak</dt>
 									<dd>{{ $riwayat->kontak }}</dd>
+									<dt>E-mail</dt>
+									<dd>{{ $riwayat->email }}</dd>
 									<dt>Rekomendasi</dt>
 									<dd>{{ $riwayat->limit }}</dd>
 									<dt>Tanggal</dt>

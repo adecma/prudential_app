@@ -18,6 +18,7 @@ class CreateRiwayatsTable extends Migration
             $table->string('nama');
             $table->string('alamat');
             $table->string('kontak');
+            $table->string('email');
             $table->unsignedTinyInteger('limit');
             $table->text('kriteria')->nullable();
             $table->text('hasil')->nullable();

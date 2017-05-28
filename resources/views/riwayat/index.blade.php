@@ -37,6 +37,7 @@
 							<th>Nama</th>
 							<th>Alamat</th>
 							<th>Kontak</th>
+							<th>E-mail</th>
 							<th>Rekomendasi</th>
 							<th colspan="2">Tanggal</th>
 						</tr>
@@ -49,6 +50,7 @@
 								<td>{{ $riwayat->nama }}</td>
 								<td>{{ $riwayat->alamat }}</td>
 								<td>{{ $riwayat->kontak }}</td>
+								<td>{{ $riwayat->email }}</td>
 								<td>{{ $riwayat->limit }}</td>
 								<td>{{ $riwayat->created_at->format('d F Y, H:i:s') }}</td>
 								<td>

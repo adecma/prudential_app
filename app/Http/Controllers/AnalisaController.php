@@ -161,6 +161,7 @@ class AnalisaController extends Controller
                 'nama' => 'required|min:5|max:50|regex:/^[a-z\ \']*$/iu',
                 'alamat' => 'required|min:5|max:140',
                 'kontak' => 'required|numeric|digits_between:10,12',
+                'email' => 'required|email',
                 'rekomendasi' => 'required|numeric|min:3|max:10',
             ]);
         // membuat rule untuk kriteria
@@ -216,6 +217,7 @@ class AnalisaController extends Controller
         $riwayat->nama = $request->input('nama');
         $riwayat->alamat = $request->input('alamat');
         $riwayat->kontak = $request->input('kontak');
+        $riwayat->email = $request->input('email');
         $riwayat->limit = $request->input('rekomendasi');
 
         foreach ($kriterias as $kriteria) {
